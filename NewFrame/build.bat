@@ -1,9 +1,9 @@
 @REM For the framework compilation
 
-set "FRAMEWORK_FOLDER=C:\SPRINT\Framew-Sprint4\NewFrame\"
-set FRAMEWORK="C:\SPRINT\Framew-Sprint4\NewFrame\Framework"
+set "FRAMEWORK_FOLDER=C:\SPRINT\Framew-Sprint7c\NewFrame\"
+set FRAMEWORK="C:\SPRINT\Framew-Sprint7c\NewFrame\Framework"
 set TOMCAT="C:\Program Files\Apache Software Foundation\Tomcat 10.0\webapps"
-set TESTFRAMEWORK="C:\SPRINT\Framew-Sprint4\NewFrame\TestFramework"
+set TESTFRAMEWORK="C:\SPRINT\Framew-Sprint7c\NewFrame\TestFramework"
 
 javac -d %FRAMEWORK%\bin %FRAMEWORK%\\*.java
 cd %FRAMEWORK%\\bin\\
