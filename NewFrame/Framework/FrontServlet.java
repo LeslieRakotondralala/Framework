@@ -23,7 +23,6 @@ import jakarta.servlet.*;
 import jakarta.servlet.annotation.*;
 import jakarta.servlet.http.*;
 
-
 import etu1920.framework.Annotation;
 import etu1920.framework.Authentication;
 import etu1920.framework.FileUploader;
@@ -36,7 +35,7 @@ import etu1920.framework.Session;
 import etu1920.framework.RestAPI;
 
 /**
- * FrontServler
+ * FrontServlet
  */
 @MultipartConfig
 public class FrontServlet extends HttpServlet {
@@ -99,9 +98,10 @@ public class FrontServlet extends HttpServlet {
             return null;
         }
     }
+
     //
     //
-     private String getFileName(Part part) {
+    private String getFileName(Part part) {
         String contentDisposition = part.getHeader("content-disposition");
         String[] parts = contentDisposition.split(";");
         for (String partStr : parts) {
@@ -110,13 +110,13 @@ public class FrontServlet extends HttpServlet {
         }
         return null;
     }
+
     //
     public void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try (PrintWriter out = response.getWriter()) {
-            String url = request.getRequestURI().substring(request.getContextPath().length()+1);
-            if (this.mappingUrls.containsKey(url))
-            {
+            String url = request.getRequestURI().substring(request.getContextPath().length() + 1);
+            if (this.mappingUrls.containsKey(url)) {
                 Mapping mapping = this.mappingUrls.get(url);
                 Class clazz = Class.forName(mapping.getClassName());
                 Field[] fields = clazz.getDeclaredFields();
@@ -172,7 +172,7 @@ public class FrontServlet extends HttpServlet {
 
                 Parameter[] parameters = equalMethod.getParameters();
                 Object[] params = new Object[parameters.length];
-                // 
+                //
                 for (int w = 0; w < parameters.length; w++) {
                     if (parameters[w].isAnnotationPresent(Annotation.class)) {
                         Annotation pAnnotation = parameters[w].getAnnotation(Annotation.class);
@@ -201,7 +201,7 @@ public class FrontServlet extends HttpServlet {
                         }
                     }
                 }
-                // 
+                // * */
                 try {
                     Collection<Part> files = request.getParts();
                     for (Field f : fields) {
@@ -217,7 +217,7 @@ public class FrontServlet extends HttpServlet {
 
                 }
 
-                // 
+                //
                 Object returnObject = null;
                 if (equalMethod.isAnnotationPresent(Authentication.class)) {
                     Authentication auth = equalMethod.getAnnotation(Authentication.class);
@@ -267,16 +267,21 @@ public class FrontServlet extends HttpServlet {
                         response.setContentType("application/json");
                         out.println(new com.google.gson.Gson().toJson(data));
                     } else {
+                        if (modelview.isInvalideSession()) {
+                            request.getSession().invalidate();
+                        }
+                        for (String each : modelview.getSessionDestroy()) {
+                            request.getSession().removeAttribute(each);
+                        }
                         RequestDispatcher requestDispatcher = request.getRequestDispatcher(modelview.getView());
                         requestDispatcher.forward(request, response);
                     }
-                }
-                else if (equalMethod.isAnnotationPresent(RestAPI.class)) {
+                } else if (equalMethod.isAnnotationPresent(RestAPI.class)) {
                     response.setContentType("application/json");
                     out.println(new com.google.gson.Gson().toJson(returnObject));
                 }
             }
-                
+
         } catch (Exception e) {
             e.printStackTrace();
         }

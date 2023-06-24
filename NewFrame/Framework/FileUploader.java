@@ -8,6 +8,7 @@ public class FileUploader {
     public void setName(String name) {
         this.name = name;
     }
+
     public String getName() {
         return name;
     }
@@ -23,6 +24,7 @@ public class FileUploader {
     public void setPaths(String paths) {
         this.paths = paths;
     }
+
     public String getPaths() {
         return paths;
     }
